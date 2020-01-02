@@ -2,6 +2,8 @@ dlog={}
 dlog.header=function() return "" end     --默认无HEADER
 dlog.UseLog=true						 --默认关闭Log开关
 
+local OldPrint=nil
+
 local function GetTimeLogFileName(uin)
 	local CurDate=os.date("*t",os.time())
 	local CurDateStr=CurDate.month .. [[-]] .. CurDate.day 
@@ -15,7 +17,7 @@ local TimeLogFileName=nil
 local dgtimelogfile=nil
 
 dlog.HookPrint= function()
-  local OldPrint = _G.print
+	OldPrint = _G.print
 	_G.print=dlog.debug
 end		
 
@@ -44,8 +46,7 @@ end
 ----------输出设备-----------
 FileDevice={}
 FileDevice.output=function(Msg,szFileName)
-	local Time=os.date("%X",os.time())
-	Msg= Time .. Msg .. "\n"
+	local Msg=Msg .. "\n"
 	OutputFile=io.open(szFileName,"a")
 	if OutputFile~=nil then
 		OutputFile:write(Msg)
@@ -62,12 +63,14 @@ doutput.__call=function(self,...)
 		if #szMsg == 0 then
 		  return
 		end
-		local Msg=self.keyword
+		local Msg=""
+		local PureMsg=""
 		for i=1,#szMsg do
-		  Msg = Msg .. tostring(szMsg[i])
+		  PureMsg = PureMsg .. tostring(szMsg[i])
 		end
-		local FileLogHeader=dlog.header()
-		Msg=FileLogHeader .. Msg
+		local Time=os.date("%X",os.time())
+		Msg=Time .. " " .. self.keyword .. ":" .. PureMsg
+		OldPrint(Msg)
 		FileDevice.output(Msg,dglogfileName)
 		FileDevice.output(Msg,TimeLogFileName)	
 	end
@@ -80,7 +83,7 @@ setmetatable(dlog.error,doutput)
 
 dlog.warning={}
 dlog.warning.show=true
-dlog.warning.keyword="[Warning]"
+dlog.warning.keyword="[Warn]"
 setmetatable(dlog.warning,doutput)
 
 dlog.debug={}

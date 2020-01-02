@@ -1,5 +1,19 @@
+require "lfs"
+g_WorkRoot=lfs.currentdir()
+
+function InitPath()
+	package.path = g_WorkRoot .. "/?.lua;" .. package.path
+	package.path = g_WorkRoot .. "/utils/?.lua;" .. package.path
+	package.path = g_WorkRoot .. "/collector/?.lua;" .. package.path
+	package.path = g_WorkRoot .. "/api/?.lua;" .. package.path
+	package.path = g_WorkRoot .. "/database/?.lua;" .. package.path
+	package.path = g_WorkRoot .. "/socket/?.lua;" .. package.path
+end
+
+InitPath()
+require "utils.init"
+dlog.Init()
 function Main()
-	require "utils/init.lua"
 	dlog.info("Akasha Started")
 end
 
