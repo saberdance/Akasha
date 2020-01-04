@@ -11,10 +11,14 @@ function InitPath()
 end
 
 InitPath()
+require "errorDefination"
 require "utils.init"
+require "envLoader"
+require "akashaConfig"
 dlog.Init()
 function Main()
 	dlog.info("Akasha Started")
+	env.LoadGlobalConfig("./akasha.conf")
 end
 
 function PMain()

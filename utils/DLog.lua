@@ -19,20 +19,21 @@ local dgtimelogfile=nil
 dlog.HookPrint= function()
 	OldPrint = _G.print
 	_G.print=dlog.debug
-end		
+end
 
 
 dlog.Init=function()
 	local uin=[[akasha]]
-	dglogfileName=[[./Log/]]..uin..[[.log]] 
+	lfs.mkdir("./Log")
+	dglogfileName=[[./Log/]]..uin..[[.log]]
 	dglogfile=io.open(dglogfileName,"w") --主要是为了创建文件
 	if dglogfile~=nil then
-		dglogfile:close()	
+		dglogfile:close()
 	end
 	TimeLogFileName=GetTimeLogFileName(uin)
 	dgtimelogfile=io.open(TimeLogFileName,"a") --主要是为了创建文件
 	if dgtimelogfile~=nil then
-		dgtimelogfile:close()	
+		dgtimelogfile:close()
 	end	
 	dlog.HookPrint()
 	if dlog.UseLog==false then
